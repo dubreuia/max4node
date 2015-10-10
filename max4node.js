@@ -110,7 +110,7 @@
 
     Max4Node.prototype.call = function(msg) {
       var args;
-      args = [msg.path, msg.method, msg.params];
+      args = msg.hasOwnProperty('params') ? [msg.path, msg.method, msg.params] : [msg.path, msg.method];
       return this.send_message('call', args);
     };
 

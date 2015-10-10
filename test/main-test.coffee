@@ -87,7 +87,24 @@ describe 'Max4Node API', ->
 
 
 
-    it 'should fire actions', (done) ->
+    it 'should fire actions without parameters', (done) ->
+
+      receiveSocket.on 'message', (msg) ->
+        obj  = osc.fromBuffer msg
+        args = normalizeArgs obj
+
+        assert.equal '/call', obj.address
+        checkArrays [path, value], args
+        done()
+
+
+      max.call
+        path: path
+        method: value
+
+
+
+    it 'should fire actions with parameters', (done) ->
 
       receiveSocket.on 'message', (msg) ->
         obj  = osc.fromBuffer msg
