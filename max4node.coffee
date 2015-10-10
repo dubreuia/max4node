@@ -103,7 +103,7 @@ class Max4Node
     @send_message 'set', args
 
   call: (msg) ->
-    args = [msg.path, msg.method]
+    args = [msg.path, msg.method, msg.params]
     @send_message 'call', args
 
   observe: (msg) ->

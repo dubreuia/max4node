@@ -36,8 +36,9 @@ describe 'Max4Node API', ->
   max = null
 
 
-  value = 'should be equal'
-  path  = 'live_set master_track mixer_device volume'
+  value  = 'should be equal'
+  path   = 'live_set master_track mixer_device volume'
+  params = '0'
 
 
   before ->
@@ -93,13 +94,14 @@ describe 'Max4Node API', ->
         args = normalizeArgs obj
 
         assert.equal '/call', obj.address
-        checkArrays [path, value], args
+        checkArrays [path, value, params], args
         done()
 
 
       max.call
         path: path
         method: value
+        params: params
 
 
 

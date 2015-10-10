@@ -45,10 +45,11 @@ actions['set'] = function(obj) {
 
 actions['call'] = function(obj) {
 	var path = obj[0],
-		method = obj[1];
+		method = obj[1],
+		params = obj[2];
 
 	var api = getApi(path);
-	api.call(method);
+	api.call(method, params);
 };
 
 
