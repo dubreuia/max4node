@@ -103,8 +103,12 @@ class Max4Node
     @send_message 'set', args
 
   call: (msg) ->
-    args = if msg.hasOwnProperty('params') then [msg.path, msg.method, msg.params] else [msg.path, msg.method]
+    args = [msg.path, msg.method]
     @send_message 'call', args
+
+  call_with_params: (msg) ->
+    args = [msg.path, msg.method, msg.params]
+    @send_message 'call_with_params', args
 
   observe: (msg) ->
     @observer_emitter msg, 'observe'

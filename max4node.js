@@ -110,8 +110,14 @@
 
     Max4Node.prototype.call = function(msg) {
       var args;
-      args = msg.hasOwnProperty('params') ? [msg.path, msg.method, msg.params] : [msg.path, msg.method];
+      args = [msg.path, msg.method];
       return this.send_message('call', args);
+    };
+
+    Max4Node.prototype.call_with_params = function(msg) {
+      var args;
+      args = [msg.path, msg.method, msg.params];
+      return this.send_message('call_with_params', args);
     };
 
     Max4Node.prototype.observe = function(msg) {

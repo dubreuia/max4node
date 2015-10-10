@@ -110,12 +110,12 @@ describe 'Max4Node API', ->
         obj  = osc.fromBuffer msg
         args = normalizeArgs obj
 
-        assert.equal '/call', obj.address
+        assert.equal '/call_with_params', obj.address
         checkArrays [path, value, params], args
         done()
 
 
-      max.call
+      max.call_with_params
         path: path
         method: value
         params: params
