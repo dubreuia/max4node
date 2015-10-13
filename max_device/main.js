@@ -62,6 +62,27 @@ actions['call_with_params'] = function(obj) {
 };
 
 
+actions['call_with_response'] = function(obj) {
+	var path   = obj[0],
+		method   = obj[1],
+		callback = obj[2];
+
+	var api = getApi(path);
+	outlet(0, '/_get_reply', callback, api.call(method));
+};
+
+
+actions['call_with_params_and_response'] = function(obj) {
+	var path   = obj[0],
+		method   = obj[1],
+		params   = obj[2],
+		callback = obj[3];
+
+	var api = getApi(path);
+	outlet(0, '/_get_reply', callback, api.call(method, params));
+};
+
+
 actions['observe'] = function(obj) {
 	var path = obj[0],
 		property = obj[1],

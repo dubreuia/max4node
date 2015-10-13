@@ -87,7 +87,12 @@ class Max4Node
     callback = @callbackHash()
     @emitters[callback] = emitter
 
-    args = [msg.path, msg.property, callback]
+    if action is 'call_with_response' or action is 'call_with_params_and_response'
+      msg.push callback
+      args = msg
+    else
+      args = [msg.path, msg.property, callback]
+
     @send_message action, args
     emitter
 
@@ -109,6 +114,14 @@ class Max4Node
   call_with_params: (msg) ->
     args = [msg.path, msg.method, msg.params]
     @send_message 'call_with_params', args
+
+  call_with_response: (msg) ->
+    args = [msg.path, msg.method]
+    @observer_emitter args, 'call_with_response'
+
+  call_with_params_and_response: (msg) ->
+    args = [msg.path, msg.method, msg.params]
+    @observer_emitter args, 'call_with_params_and_response'
 
   observe: (msg) ->
     @observer_emitter msg, 'observe'

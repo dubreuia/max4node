@@ -122,6 +122,63 @@ describe 'Max4Node API', ->
 
 
 
+    it 'should fire actions that return a result', (done) ->
+
+      method = 'call_with_response'
+
+      receiveSocket.on 'message', (msg) ->
+        obj  = osc.fromBuffer msg
+        args = normalizeArgs obj
+
+        assert.equal '/' + method, obj.address
+        checkArrays [path, 'value'], args.slice(0, 2)
+        assert.ok args[2]
+
+        buf = osc.toBuffer
+          address: '/_get_reply',
+          args: [args[2], value]
+
+        sendSocket.send buf, 0, buf.length, receivePort, 'localhost'
+
+
+      max[method]
+        path: path
+        method: 'value'
+      .once 'value', (check) ->
+        assert.equal value, check
+        done()
+
+
+
+    it 'should fire actions with parameters that return a result', (done) ->
+
+      method = 'call_with_params_and_response'
+
+      receiveSocket.on 'message', (msg) ->
+        obj  = osc.fromBuffer msg
+        args = normalizeArgs obj
+
+        assert.equal '/' + method, obj.address
+        checkArrays [path, 'value'], args.slice(0, 2)
+        assert.ok args[2]
+
+        buf = osc.toBuffer
+          address: '/_get_reply',
+          args: [args[3], value]
+
+        sendSocket.send buf, 0, buf.length, receivePort, 'localhost'
+
+
+      max[method]
+        path: path
+        method: 'value',
+        params: params
+      .once 'value', (check) ->
+        assert.equal value, check
+        done()
+
+
+
     it 'should observe properties', (done) ->
 
       expected = [0.25, 0.5, 0.85]

@@ -89,7 +89,12 @@
       emitter = new EventEmitter();
       callback = this.callbackHash();
       this.emitters[callback] = emitter;
-      args = [msg.path, msg.property, callback];
+      if (action === 'call_with_response' || action === 'call_with_params_and_response') {
+        msg.push(callback);
+        args = msg;
+      } else {
+        args = [msg.path, msg.property, callback];
+      }
       this.send_message(action, args);
       return emitter;
     };
@@ -118,6 +123,18 @@
       var args;
       args = [msg.path, msg.method, msg.params];
       return this.send_message('call_with_params', args);
+    };
+
+    Max4Node.prototype.call_with_response = function(msg) {
+      var args;
+      args = [msg.path, msg.method];
+      return this.observer_emitter(args, 'call_with_response');
+    };
+
+    Max4Node.prototype.call_with_params_and_response = function(msg) {
+      var args;
+      args = [msg.path, msg.method, msg.params];
+      return this.observer_emitter(args, 'call_with_params_and_response');
     };
 
     Max4Node.prototype.observe = function(msg) {
