@@ -45,7 +45,7 @@ class Max4Node
     socket.on 'message', (msg, rinfo) =>
       obj = @parse_message msg
 
-      if obj.is_get_reply or obj.is_observer_reply
+      if obj.is_get_reply or obj.is_get_stream_reply or obj.is_observer_reply
         try
           @emitters[obj.callback].emit 'value', obj.value
         catch err
@@ -63,6 +63,11 @@ class Max4Node
     switch obj.address
       when '/_get_reply'
         obj.is_get_reply = true
+        obj.callback = args[0]
+        obj.value = args[1]
+
+      when '/_get_stream_reply'
+        obj.is_get_stream_reply = true
         obj.callback = args[0]
         obj.value = args[1]
 
@@ -100,8 +105,8 @@ class Max4Node
     (new Date()).getTime().toString() + Math.random().toString()
 
 
-  get: (msg) ->
-    @observer_emitter msg, 'get'
+  get: (msg, action) ->
+    @observer_emitter msg, action or 'get'
 
   set: (msg) ->
     args = [msg.path, msg.property, msg.value]

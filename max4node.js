@@ -37,7 +37,7 @@
         return function(msg, rinfo) {
           var err, error, obj;
           obj = _this.parse_message(msg);
-          if (obj.is_get_reply || obj.is_observer_reply) {
+          if (obj.is_get_reply || obj.is_get_stream_reply || obj.is_observer_reply) {
             try {
               _this.emitters[obj.callback].emit('value', obj.value);
             } catch (error) {
@@ -61,6 +61,11 @@
       switch (obj.address) {
         case '/_get_reply':
           obj.is_get_reply = true;
+          obj.callback = args[0];
+          obj.value = args[1];
+          break;
+        case '/_get_stream_reply':
+          obj.is_get_stream_reply = true;
           obj.callback = args[0];
           obj.value = args[1];
           break;
@@ -103,8 +108,8 @@
       return (new Date()).getTime().toString() + Math.random().toString();
     };
 
-    Max4Node.prototype.get = function(msg) {
-      return this.observer_emitter(msg, 'get');
+    Max4Node.prototype.get = function(msg, action) {
+      return this.observer_emitter(msg, action || 'get');
     };
 
     Max4Node.prototype.set = function(msg) {
